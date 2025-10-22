@@ -1,13 +1,39 @@
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from "react-native"
-import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withSpring, withTiming } from "react-native-reanimated";
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withDecay, withRepeat, withSpring, withTiming } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import IncreaseCircle from "./IncreaseCircle";
 import { useEffect } from "react";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
 
 const width = Dimensions.get('window').width
 const MoveLeft = () => {
     const translateX = useSharedValue<number>(0);
     const linear = useSharedValue<number>(0);
+    const pressed=useSharedValue<boolean>(false);
+    const offset= useSharedValue<number>(0);
+
+    const pan= Gesture.Pan()
+                .onBegin(()=>{
+                    pressed.value=true;
+                })
+                .onChange((event)=>{
+                    // offset.value= event.translationX // for moving the any direction and will back to position
+                    offset.value += event.changeX
+                })
+                .onFinalize((event)=>{
+                    // offset.value= withSpring(0) // moving back to actual place
+                    offset.value= withDecay({
+                        velocity: event.velocityX,
+                        rubberBandEffect:true,
+                        clamp: [-width, width]
+                    })
+                    pressed.value=false
+                })
+    
+    const animatedCircleStyle=useAnimatedStyle(()=>({
+        transform:[{translateX: offset.value}, {scale: withTiming(pressed.value ? 1.2 : 1)}],
+        backgroundColor: pressed.value ? 'rgba(101, 222, 91, 1)' : 'rgba(178, 138, 17, 1)'
+    }))
     const handlePress = () => {
         translateX.value += 30;
     }
@@ -44,6 +70,9 @@ const MoveLeft = () => {
             </Animated.View>
             <Animated.View style={[styles.dot, animatedLinear]} />
             <IncreaseCircle />
+            <GestureDetector gesture={pan}>
+                <Animated.View style={[styles.dot, animatedCircleStyle]}/>
+            </GestureDetector>
         </SafeAreaView>
     )
 }
