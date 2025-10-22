@@ -12,15 +12,18 @@ import {
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 import MoveLeft from './src/components/MoveLeft';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
 
   return (
-    <SafeAreaProvider>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <AppContent />
-    </SafeAreaProvider>
+    <GestureHandlerRootView>
+      <SafeAreaProvider>
+        <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+        <AppContent />
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
 
@@ -29,7 +32,7 @@ function AppContent() {
 
   return (
     <View style={styles.container}>
-      <MoveLeft/>
+      <MoveLeft />
     </View>
   );
 }
@@ -39,7 +42,7 @@ const styles = StyleSheet.create({
     // flex: 1,
     // justifyContent:'center',
     // alignItems:'center',
-    marginHorizontal:10,
+    marginHorizontal: 10,
   },
 });
 
