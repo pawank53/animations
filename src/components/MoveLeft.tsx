@@ -1,6 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
+import IncreaseCircle from "./IncreaseCircle";
 
 const MoveLeft = () => {
     const translateX=useSharedValue<number>(0);
@@ -20,6 +21,8 @@ const MoveLeft = () => {
                     <Text>Click me!</Text>
                 </TouchableOpacity>
             </Animated.View>
+            <Animated.View style={styles.dot}/>
+            <IncreaseCircle/>
         </SafeAreaView>
     )
 }
@@ -43,6 +46,11 @@ const styles=StyleSheet.create({
         alignSelf:'center',
         borderRadius:50,
         backgroundColor:'rgba(161, 245, 190, 1)',
+    },
+    dot:{
+        height:1,
+        backgroundColor:'rgba(147, 148, 147, 0.5)',
+        marginTop:10
     }
 })
 
