@@ -2,7 +2,7 @@ import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from "react-nati
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withDecay, withRepeat, withSpring, withTiming } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import IncreaseCircle from "./IncreaseCircle";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 
 const width = Dimensions.get('window').width
@@ -11,6 +11,7 @@ const MoveLeft = () => {
     const linear = useSharedValue<number>(0);
     const pressed=useSharedValue<boolean>(false);
     const offset= useSharedValue<number>(0);
+    const [toggle, setToggle]=useState(false)
 
     const pan= Gesture.Pan()
                 .onBegin(()=>{
@@ -60,6 +61,10 @@ const MoveLeft = () => {
         )
     }, [])
 
+    const handleToggle=()=>{
+        setToggle((t)=> !t )
+    }
+
     return (
         <SafeAreaView>
             <Animated.View style={[styles.container, animationStyles]} />
@@ -73,6 +78,19 @@ const MoveLeft = () => {
             <GestureDetector gesture={pan}>
                 <Animated.View style={[styles.dot, animatedCircleStyle]}/>
             </GestureDetector>
+            <Animated.View 
+            style={[styles.square,{
+                backgroundColor: toggle ? 'rgba(97, 218, 10, 0.5)' :'rgba(233, 32, 32, 0.5)',
+                transform:[{rotateZ: toggle ? '0deg' : '180deg'}],
+                transitionProperty:'transform',
+                transitionDuration:'300ms',
+                transitionTimingFunction:'ease-in-out'
+
+            }]}
+            />
+            <TouchableOpacity onPress={handleToggle} style={styles.subContainer}>
+                    <Text>Click me!</Text>
+                </TouchableOpacity>
         </SafeAreaView>
     )
 }
@@ -103,6 +121,12 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(233, 32, 32, 0.5)',
         marginTop: 10,
         borderRadius: 20
+    },
+    square: {
+        height: 40,
+        width: 40,
+        marginTop: 10,
+        alignSelf:'center'
     }
 })
 
