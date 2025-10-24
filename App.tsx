@@ -13,6 +13,8 @@ import {
 } from 'react-native-safe-area-context';
 import MoveLeft from './src/components/MoveLeft';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import ServerDrivenUI from './src/SDUI/ui/ServerDrivenUI';
+import {hotels} from './src/SDUI/jSON/hotel';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
@@ -32,7 +34,8 @@ function AppContent() {
 
   return (
     <View style={styles.container}>
-      <MoveLeft />
+      {/* <MoveLeft /> */}
+      <ServerDrivenUI jsonData={hotels}/>
     </View>
   );
 }
